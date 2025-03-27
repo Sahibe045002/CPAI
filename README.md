@@ -1,7 +1,7 @@
 # **Automated Student Grading System**
 
-## **1. Objective of the Project**
-The objective of this project is to develop an AI-powered system that automates and enhances student grading accuracy. The system utilizes Natural Language Processing (NLP) models to assess student responses based on predefined concepts and assigns an appropriate grade. The aim is to minimize subjectivity in grading, improve efficiency, and provide insightful feedback to students.
+## **1. Objective**
+This project aims to develop an AI-powered system that automates and enhances student grading accuracy. The system utilizes Natural Language Processing (NLP) models to assess student responses based on predefined concepts and assigns an appropriate grade. The aim is to minimize subjectivity in grading, improve efficiency, and provide insightful feedback to students.
 
 ## **2. Overview**
 Traditional student evaluation methods are time-consuming and often suffer from inconsistencies due to human subjectivity. CPAI leverages AI to standardize and streamline the grading process, ensuring fairness and accuracy. The project involves:
@@ -67,9 +67,9 @@ Upon deployment, the system:
 - Takes a **student’s response as input**.
 - Processes the input through the fine-tuned **BERT model**.
 - Outputs a **predicted grade** along with a confidence score.
-- Provides **real-time results** through a user-friendly Streamlit interface.
+- It provides **real-time results** through a user-friendly Streamlit interface.
 
 ## **11. Conclusion**
-The CPAI project successfully demonstrates how AI can revolutionize student assessment by making grading **faster, more consistent, and data-driven**. With further improvements, the system can be scaled for broader applications in educational institutions worldwide.
+Ths project successfully demonstrates how AI can revolutionize student assessment by making grading **faster, more consistent, and data-driven**. With further improvements, the system can be scaled for broader applications in educational institutions worldwide.
 
 
