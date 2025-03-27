@@ -1,41 +1,61 @@
 import streamlit as st
+import pandas as pd
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
-from huggingface_hub import login
 
-# If you're using a Hugging Face model or private models, authenticate with the token (Streamlit Secrets)
-login(token=st.secrets["huggingface"]["token"])
+# ✅ File uploader to load dataset manually
+st.title("📚 AI-Powered Student Grading")
+uploaded_file = st.file_uploader("Upload Behavioral Economics Dataset (CSV)", type="csv")
 
-# Model path (local or Hugging Face model name)
-# If you are using a Hugging Face model from the Hub, just use the model name like 'bert-base-uncased'
-model_path = "bert-base-uncased"  # Example Hugging Face model name
+if uploaded_file:
+    df = pd.read_csv(uploaded_file)
 
-# Load tokenizer and model
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-model = AutoModelForSequenceClassification.from_pretrained(model_path)
+    # ✅ Show dataset after upload
+    st.write("Here is the dataset you've uploaded:")
+    st.dataframe(df)  # Displays the uploaded dataset as a table
 
-# Grade mapping (for your use case)
-grade_mapping = {0: "A+", 1: "A", 2: "B", 3: "C", 4: "D", 5: "F"}
-
-# Function to predict grade
-def predict_grade(student_response):
-    inputs = tokenizer(student_response, return_tensors="pt", truncation=True, padding=True)
-    with torch.no_grad():
-        outputs = model(**inputs)
-    predicted_class = torch.argmax(outputs.logits, dim=1).item()
-    return grade_mapping[predicted_class]
-
-# Streamlit UI
-st.title("Student Grade Prediction")
-st.write("Enter the student's response to predict the grade:")
-
-# Input box for student’s response
-student_answer = st.text_area("Student's Answer", height=200)
-
-# Button to trigger prediction
-if st.button("Predict Grade"):
-    if student_answer:
-        predicted_grade = predict_grade(student_answer)
-        st.success(f"Predicted Grade: {predicted_grade}")
+    # ✅ Ensure 'Concept' column exists
+    if "Concept" in df.columns:
+        unique_concepts = df["Concept"].dropna().unique().tolist()
     else:
-        st.warning("Please enter a student response.")
+        st.error("🚨 'Concept' column not found in dataset! Please check the file.")
+        st.stop()
+
+    # ✅ Load model & tokenizer (with error handling)
+    MODEL_NAME = "bert-base-uncased"
+
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=10)
+    except Exception as e:
+        st.error(f"🚨 Model loading failed! Error: {e}")
+        st.stop()
+
+    # ✅ Grade mapping
+    grade_mapping = {0: "A+", 1: "A", 2: "A-", 3: "B+", 4: "B", 5: "B-", 6: "C+", 7: "C", 8: "D", 9: "F"}
+
+    # ✅ Function to predict grade
+    def predict_grade(concept, student_response):
+        combined_input = f"Concept: {concept}. Student Answer: {student_response}"
+        inputs = tokenizer(combined_input, return_tensors="pt", truncation=True, padding=True)
+
+        with torch.no_grad():
+            outputs = model(**inputs)
+
+        predicted_class = torch.argmax(outputs.logits, dim=1).item()
+        return grade_mapping.get(predicted_class, "Unknown")
+
+    # ✅ Streamlit UI for Concept Selection
+    st.write("Select the concept from the dropdown and enter the student's response to predict their grade.")
+
+    concept = st.selectbox("🧠 Select Concept", unique_concepts)
+    student_answer = st.text_area("📝 Student's Answer", height=150)
+
+    if st.button("🎯 Predict Grade"):
+        if student_answer:
+            predicted_grade = predict_grade(concept, student_answer)
+            st.success(f"✅ Predicted Grade: **{predicted_grade}**")
+        else:
+            st.warning("⚠️ Please enter the student's response.")
+else:
+    st.warning("⚠️ Please upload the dataset to proceed.")
