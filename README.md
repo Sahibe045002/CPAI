@@ -1,7 +1,7 @@
-# **Concept-Based Predictive AI (CPAI) for Automated Student Grading**
+# **Automated Student Grading System**
 
 ## **1. Objective of the Project**
-The objective of this project is to develop an AI-powered system that automates and enhances the accuracy of student grading. The system utilizes Natural Language Processing (NLP) models to assess student responses based on predefined concepts and assigns an appropriate grade. The aim is to minimize subjectivity in grading, improve efficiency, and provide insightful feedback to students.
+The objective of this project is to develop an AI-powered system that automates and enhances student grading accuracy. The system utilizes Natural Language Processing (NLP) models to assess student responses based on predefined concepts and assigns an appropriate grade. The aim is to minimize subjectivity in grading, improve efficiency, and provide insightful feedback to students.
 
 ## **2. Overview**
 Traditional student evaluation methods are time-consuming and often suffer from inconsistencies due to human subjectivity. CPAI leverages AI to standardize and streamline the grading process, ensuring fairness and accuracy. The project involves:
